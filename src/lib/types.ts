@@ -136,7 +136,10 @@ export type PresetName =
 	| 'cascade'
 	| 'burst'
 	| 'twinkle'
-	| 'scatter';
+	| 'scatter'
+	| 'radar'
+	| 'corners-spin'
+	| 'snake-v';
 
 export type ThemeName =
 	| 'white'

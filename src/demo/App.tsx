@@ -23,7 +23,7 @@ export function App() {
 				<Playground onCopy={show} />
 				<Usage />
 				<footer>
-					built with <a href="https://react.dev">react</a> + <a href="https://vitejs.dev">vite</a>.
+					by <a href="https://czorr.com">czorr</a>.
 					MIT.
 				</footer>
 			</main>
@@ -37,18 +37,15 @@ export function App() {
 function Hero() {
 	return (
 		<section className="hero">
-			<div>
-				<h1>pixgrid</h1>
-				<p>
-					A tiny animated 3×3 pixel grid indicator for React. Zero runtime dependencies,
-					multi-color palettes, rounded cells, 20 preset patterns. ~1 KB gzipped.
-				</p>
-				<code className="install">npm install pixgrid</code>
-			</div>
-			<div className="hero-grid">
-				<PixelGrid theme="aurora" preset="spiral-cw" cellSize={28} gap={3} radius={4} />
-				<small>aurora · spiral-cw</small>
-			</div>
+			<h1>
+				pixgrid
+				<PixelGrid theme="aurora" preset="spiral-cw" cellSize={4} gap={2} radius={1} />
+			</h1>
+			<p>
+				A tiny animated 3×3 pixel grid indicator for React. Zero runtime dependencies,
+				multi-color palettes, rounded cells, 20 preset patterns. ~1 KB gzipped.
+			</p>
+			<code className="install">npm install pixgrid</code>
 		</section>
 	);
 }
@@ -61,49 +58,43 @@ function PresetGallery({ onCopy }: { onCopy: (msg: string) => void }) {
 			<header>
 				<h2>presets</h2>
 				<p className="section-hint">
-					20 stagger patterns. Click any card to copy its <code>delays</code> array.
+					{presetNames.length} stagger patterns. Click any card to see and copy its JSX.
 				</p>
 			</header>
 			<div className="cards">
 				{presetNames.map((name) => (
-					<PresetCard key={name} name={name} onCopy={onCopy} />
+					<ExampleCard
+						key={name}
+						label={name}
+						props={{ preset: name }}
+						onCopy={onCopy}
+					/>
 				))}
 			</div>
 		</section>
 	);
 }
 
-function PresetCard({ name, onCopy }: { name: PresetName; onCopy: (msg: string) => void }) {
-	const copy = () => {
-		void navigator.clipboard
-			?.writeText(`preset="${name}"`)
-			.then(() => onCopy(`copied preset="${name}"`));
-	};
-	return (
-		<div className="card" data-copyable onClick={copy} role="button" tabIndex={0}>
-			<PixelGrid preset={name} cellSize={14} gap={2} radius={1} />
-			<span className="label">{name}</span>
-		</div>
-	);
-}
-
 /* ─── Theme gallery ────────────────────────────────────── */
 
-function ThemeGallery() {
+function ThemeGallery({ onCopy }: { onCopy: (msg: string) => void }) {
 	return (
 		<section>
 			<header>
 				<h2>themes</h2>
 				<p className="section-hint">
-					Single-color and multi-color palettes. Supply <code>color</code>/<code>glow</code>/<code>off</code> as a string, array of 9, or function — themes are just presets over those fields.
+					Single-color and multi-color palettes. Supply <code>color</code>/<code>glow</code>/<code>off</code>
+					{' '}as a string, array of 9, or function to override.
 				</p>
 			</header>
 			<div className="cards">
 				{themeNames.map((name) => (
-					<div key={name} className="card">
-						<PixelGrid theme={name} preset="diagonal-tl" cellSize={14} gap={2} radius={1} />
-						<span className="label">{name}</span>
-					</div>
+					<ExampleCard
+						key={name}
+						label={name}
+						props={{ theme: name, preset: 'diagonal-tl' }}
+						onCopy={onCopy}
+					/>
 				))}
 			</div>
 		</section>
@@ -112,7 +103,7 @@ function ThemeGallery() {
 
 /* ─── Radius showcase ──────────────────────────────────── */
 
-function RadiusShowcase() {
+function RadiusShowcase({ onCopy }: { onCopy: (msg: string) => void }) {
 	const variants: { label: string; radius: RadiusValue; preset: PresetName; theme: ThemeName }[] = [
 		{ label: 'square', radius: 0, preset: 'wave-lr', theme: 'cyan' },
 		{ label: 'soft 2px', radius: 2, preset: 'pinwheel', theme: 'violet' },
@@ -136,16 +127,14 @@ function RadiusShowcase() {
 			</header>
 			<div className="cards">
 				{variants.map((v) => (
-					<div key={v.label} className="card">
-						<PixelGrid
-							preset={v.preset}
-							theme={v.theme}
-							radius={v.radius}
-							cellSize={18}
-							gap={3}
-						/>
-						<span className="label">{v.label}</span>
-					</div>
+					<ExampleCard
+						key={v.label}
+						label={v.label}
+						props={{ preset: v.preset, theme: v.theme, radius: v.radius }}
+						displayCellSize={18}
+						displayGap={3}
+						onCopy={onCopy}
+					/>
 				))}
 			</div>
 		</section>
