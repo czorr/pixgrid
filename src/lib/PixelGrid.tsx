@@ -59,13 +59,14 @@ export function PixelGrid({
 	style
 }: PixelGridProps) {
 	// ---- Resolve pattern --------------------------------------------------
-	const { delays, duration } = useMemo(() => {
+	const { delays, duration, mode } = useMemo(() => {
 		const base = preset
 			? presets[preset]
 			: { delays: DEFAULT_DELAYS, duration: DEFAULT_DURATION };
 		return {
 			delays: delaysProp ?? base.delays,
-			duration: durationProp ?? base.duration
+			duration: durationProp ?? base.duration,
+			mode: base.mode
 		};
 	}, [preset, delaysProp, durationProp]);
 
@@ -87,7 +88,7 @@ export function PixelGrid({
 				index: i,
 				col: i % 3,
 				row: Math.floor(i / 3),
-				delay: delays[i] ?? 0
+				delay: Math.max(0, delays[i] ?? 0)
 			};
 			const onColor = resolveColor(colorValue, ctx);
 
@@ -129,40 +130,80 @@ export function PixelGrid({
 		const timeouts = new Set<ReturnType<typeof setTimeout>>();
 		let cancelled = false;
 
-		// If motion is reduced, use a near-instant transition so cells still
-		// toggle visibly — just without the 300ms fade.
-		const transition = reduceMotion
-			? 'opacity 1ms linear'
-			: 'opacity 280ms cubic-bezier(0.4, 0, 0.6, 1)';
-
-		for (const el of onLayerRefs.current) {
-			if (el) el.style.transition = transition;
-		}
-
-		const phase = (on: boolean) => {
-			if (cancelled) return;
-			let maxDelay = 0;
-			for (let i = 0; i < 9; i++) {
-				const d = delays[i] ?? 0;
-				if (d > maxDelay) maxDelay = d;
-				const t = setTimeout(() => {
-					const el = onLayerRefs.current[i];
-					if (el) el.style.opacity = on ? '1' : '0';
-				}, d);
-				timeouts.add(t);
+		if (mode === 'sweep') {
+			// Sweep mode: each cell lights individually.
+			// delay === -1 marks a cell as permanently on (never turns off).
+			const transition = reduceMotion ? 'opacity 1ms linear' : 'opacity 80ms ease-out';
+			for (const el of onLayerRefs.current) {
+				if (el) el.style.transition = transition;
 			}
-			const next = setTimeout(() => phase(!on), maxDelay + duration);
-			timeouts.add(next);
-		};
 
-		phase(true);
+			const sweepLoop = () => {
+				if (cancelled) return;
+				let maxEnd = 0;
+				for (let i = 0; i < 9; i++) {
+					const d = delays[i] ?? 0;
+					if (d < 0) {
+						// Permanently on — set immediately, skip off scheduling.
+						const el = onLayerRefs.current[i];
+						if (el) el.style.opacity = '1';
+						continue;
+					}
+					const end = d + duration;
+					if (end > maxEnd) maxEnd = end;
+					const t1 = setTimeout(() => {
+						if (cancelled) return;
+						const el = onLayerRefs.current[i];
+						if (el) el.style.opacity = '1';
+					}, d);
+					const t2 = setTimeout(() => {
+						if (cancelled) return;
+						const el = onLayerRefs.current[i];
+						if (el) el.style.opacity = '0';
+					}, end);
+					timeouts.add(t1);
+					timeouts.add(t2);
+				}
+				// 100ms gap between sweep cycles.
+				const next = setTimeout(sweepLoop, maxEnd + 100);
+				timeouts.add(next);
+			};
+
+			sweepLoop();
+		} else {
+			// Default pulse mode: staggered all-on → hold → all-off.
+			const transition = reduceMotion
+				? 'opacity 1ms linear'
+				: 'opacity 280ms cubic-bezier(0.4, 0, 0.6, 1)';
+			for (const el of onLayerRefs.current) {
+				if (el) el.style.transition = transition;
+			}
+
+			const phase = (on: boolean) => {
+				if (cancelled) return;
+				let maxDelay = 0;
+				for (let i = 0; i < 9; i++) {
+					const d = delays[i] ?? 0;
+					if (d > maxDelay) maxDelay = d;
+					const t = setTimeout(() => {
+						const el = onLayerRefs.current[i];
+						if (el) el.style.opacity = on ? '1' : '0';
+					}, d);
+					timeouts.add(t);
+				}
+				const next = setTimeout(() => phase(!on), maxDelay + duration);
+				timeouts.add(next);
+			};
+
+			phase(true);
+		}
 
 		return () => {
 			cancelled = true;
 			for (const t of timeouts) clearTimeout(t);
 			timeouts.clear();
 		};
-	}, [delays, duration, paused]);
+	}, [delays, duration, mode, paused]);
 
 	// ---- Render (once) ----------------------------------------------------
 	const containerStyle: CSSProperties = {

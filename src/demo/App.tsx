@@ -43,7 +43,7 @@ function Hero() {
 			</h1>
 			<p>
 				A tiny animated 3×3 pixel grid indicator for React. Zero runtime dependencies,
-				multi-color palettes, rounded cells, 20 preset patterns. ~1 KB gzipped.
+				multi-color palettes, rounded cells, 30 preset patterns. ~1 KB gzipped.
 			</p>
 			<code className="install">npm install pixgrid</code>
 		</section>

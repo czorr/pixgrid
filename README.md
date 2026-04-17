@@ -1,10 +1,8 @@
-# pixgrid
+<p align="center">
+  <img src="./src/public/pixgrid.png" alt="pixgrid" width="220" />
+</p>
 
-A tiny animated 3×3 pixel grid indicator for React. Zero runtime dependencies, ~1 KB gzipped, multi-color palettes and rounded cells out of the box.
-
-Inspired by [MetaHeavies/3-pixel-grid](https://github.com/MetaHeavies/3-pixel-grid).
-
-![demo placeholder](./demo.gif)
+<p align="center">A tiny animated 3×3 pixel grid indicator for React.<br/>Zero runtime dependencies, ~1 KB gzipped, multi-color palettes and rounded cells out of the box.</p>
 
 ## Install
 

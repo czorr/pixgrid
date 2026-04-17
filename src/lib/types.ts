@@ -45,10 +45,18 @@ export type RadiusValue =
 	| ((ctx: CellContext) => number | string);
 
 export interface Pattern {
-	/** 9 delays in ms, row-major (top-left → bottom-right). */
+	/** 9 delays in ms, row-major (top-left → bottom-right).
+	 *  A value of -1 (sweep mode only) marks a cell as permanently on. */
 	delays: readonly number[];
-	/** Hold time (ms) after all cells are on before toggling off. */
+	/** Hold time (ms) after all cells are on before toggling off.
+	 *  In sweep mode: how long each cell stays lit as the beam passes. */
 	duration: number;
+	/**
+	 * Animation strategy.
+	 * - `'pulse'` (default) — staggered all-on → hold → all-off cycle.
+	 * - `'sweep'` — each cell lights individually; use delay=-1 for permanently-on cells.
+	 */
+	mode?: 'sweep';
 }
 
 export interface Theme {

@@ -34,7 +34,14 @@ export const presets: Record<PresetName, Pattern> = {
 	// Scattered artistic timing, feels like starlight.
 	twinkle: { delays: [0, 300, 60, 240, 120, 360, 180, 420, 90], duration: 180 },
 	// Non-obvious ordering, evokes a shuffle.
-	scatter: { delays: [80, 320, 0, 200, 440, 160, 360, 40, 280], duration: 140 }
+	scatter: { delays: [80, 320, 0, 200, 440, 160, 360, 40, 280], duration: 140 },
+	// Sweep mode: beam rotates CW from 12 o'clock; center (-1) stays permanently lit.
+	// delays by cell index: TL=420, TM=0, TR=60, ML=360, C=-1, MR=120, BL=300, BM=240, BR=180
+	radar: { delays: [420, 0, 60, 360, -1, 120, 300, 240, 180], duration: 80, mode: 'sweep' },
+	// 4 corners rotate CW in tight bursts, then edges + center fill in.
+	'corners-spin': { delays: [0, 450, 100, 450, 450, 450, 300, 450, 200], duration: 180 },
+	// Column-wise boustrophedon: col 0 top→bottom, col 1 bottom→top, col 2 top→bottom.
+	'snake-v': { delays: [0, 400, 480, 80, 320, 560, 160, 240, 640], duration: 160 }
 };
 
 export const presetNames = Object.keys(presets) as PresetName[];
