@@ -1,6 +1,6 @@
 {
   "name": "pixgrid",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tiny animated 3×3 pixel grid indicator for React. Zero runtime deps, multi-color and rounded-cell support out of the box.",
   "keywords": [
     "react",
