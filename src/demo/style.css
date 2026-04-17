@@ -29,6 +29,21 @@ body {
 		Roboto,
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
+	min-height: 100vh;
+}
+
+/* Ambient gradient wash gives the backdrop-filter layers something
+   to actually blur — otherwise glassmorphism looks flat over a solid color. */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: -1;
+	background:
+		radial-gradient(ellipse 60% 50% at 15% 0%, rgba(125, 249, 255, 0.08) 0%, transparent 55%),
+		radial-gradient(ellipse 50% 40% at 85% 80%, rgba(160, 120, 255, 0.06) 0%, transparent 55%),
+		radial-gradient(ellipse 80% 60% at 50% 100%, rgba(125, 249, 255, 0.04) 0%, transparent 55%);
 }
 
 a {
@@ -74,11 +89,12 @@ main {
 .hero .install {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.5rem;
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 8px;
-	padding: 0.5rem 0.85rem;
+	gap: 0.6rem;
+	background: #15151c;
+	color: var(--text);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 10px;
+	padding: 0.55rem 0.95rem;
 	font-family: var(--mono);
 	font-size: 0.9rem;
 }
@@ -118,32 +134,35 @@ h2 {
 
 .cards {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-	gap: 0.75rem;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: 2.25rem 1.5rem;
 }
 
 .card {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	gap: 1rem;
-	padding: 1.5rem 1rem 1rem;
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 10px;
-	transition: border-color 160ms ease, background 160ms ease;
+	justify-content: flex-start;
+	gap: 1.1rem;
+	padding: 0.5rem 0.25rem;
+	background: transparent;
+	border: 0;
+	transition: transform 200ms ease;
 }
 
 .card:hover {
-	border-color: #2e2e3c;
-	background: var(--surface-2);
+	transform: translateY(-2px);
 }
 
 .card .label {
 	font-family: var(--mono);
-	font-size: 0.75rem;
+	font-size: 0.78rem;
 	color: var(--text-dim);
+	transition: color 180ms ease;
+}
+
+.card:hover .label {
+	color: var(--text);
 }
 
 .card[data-copyable],
@@ -187,15 +206,16 @@ h2 {
 }
 
 .modal {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 14px;
+	background: #15151c;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 16px;
 	max-width: 560px;
 	width: 100%;
 	max-height: 90vh;
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
+	box-shadow: 0 24px 80px -20px rgba(0, 0, 0, 0.7);
 	animation: modal-rise 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -215,7 +235,7 @@ h2 {
 	justify-content: space-between;
 	align-items: center;
 	padding: 1rem 1.25rem;
-	border-bottom: 1px solid var(--border);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .modal-label {
@@ -252,56 +272,27 @@ h2 {
 	padding: 2.5rem 1.5rem;
 	background:
 		radial-gradient(ellipse at center, rgba(125, 249, 255, 0.05) 0%, transparent 60%),
-		var(--bg);
-	border-bottom: 1px solid var(--border);
+		#0a0a10;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .modal-snippet {
 	padding: 1rem 1.25rem 1.25rem;
 }
 
-.modal-snippet > header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.5rem;
-}
-
-.modal-snippet h4 {
-	margin: 0;
-	font-size: 0.7rem;
-	font-weight: 500;
-	text-transform: uppercase;
-	letter-spacing: 0.14em;
-	color: var(--text-faint);
-}
-
-.modal-snippet pre {
-	margin: 0;
-}
-
 /* ─── Code blocks ──────────────────────────────────────── */
 
 pre {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 10px;
-	padding: 1rem 1.2rem;
-	overflow-x: auto;
 	margin: 0;
-	font-family: var(--mono);
-	font-size: 0.85rem;
-	line-height: 1.55;
-	color: #d4d4d8;
 }
 
 code {
 	font-family: var(--mono);
-	font-size: 0.9em;
-	background: var(--surface);
-	padding: 0.1em 0.4em;
+	font-size: 0.88em;
+	background: rgba(255, 255, 255, 0.05);
+	color: var(--text);
+	padding: 0.12em 0.4em;
 	border-radius: 4px;
-	border: 1px solid var(--border);
 }
 
 pre code {
@@ -309,6 +300,95 @@ pre code {
 	border: 0;
 	padding: 0;
 	font-size: inherit;
+	color: inherit;
+}
+
+.code-block {
+	background: #15151c;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 14px;
+	overflow: hidden;
+}
+
+.code-block + .code-block {
+	margin-top: 1rem;
+}
+
+.code-block-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+	min-height: 2.75rem;
+	padding: 0 0.5rem 0 1rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.code-block-tabs {
+	display: flex;
+	gap: 0.1rem;
+	align-items: stretch;
+}
+
+.code-block-tab {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	padding: 0 0.85rem;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	font-family: var(--mono);
+	font-size: 0.82rem;
+	color: var(--text-faint);
+	transition: color 160ms ease;
+}
+
+.code-block-tab:hover {
+	color: var(--text-dim);
+}
+
+.code-block-tab.is-active {
+	color: var(--text);
+	cursor: default;
+}
+
+.code-block-tab.is-active::after {
+	content: '';
+	position: absolute;
+	left: 0.85rem;
+	right: 0.85rem;
+	bottom: -1px;
+	height: 1px;
+	background: var(--text);
+}
+
+.code-block-copy {
+	align-self: center;
+	background: transparent;
+	border: 0;
+	color: var(--text-faint);
+	cursor: pointer;
+	padding: 0.45rem;
+	border-radius: 6px;
+	display: grid;
+	place-items: center;
+	transition: color 160ms ease, background 160ms ease;
+}
+
+.code-block-copy:hover {
+	color: var(--text);
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.code-block-content {
+	margin: 0;
+	padding: 1.3rem 1.4rem;
+	background: #0a0a10;
+	overflow-x: auto;
+	font-family: var(--mono);
+	font-size: 0.86rem;
+	line-height: 1.7;
+	color: #d4d4d8;
 }
 
 /* ─── Playground ───────────────────────────────────────── */
@@ -327,10 +407,10 @@ pre code {
 }
 
 .panel {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 1.25rem;
+	background: #15151c;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 14px;
+	padding: 1.35rem;
 }
 
 .preview {
@@ -340,9 +420,9 @@ pre code {
 	min-height: 280px;
 	background:
 		radial-gradient(ellipse at center, rgba(125, 249, 255, 0.05) 0%, transparent 60%),
-		var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 12px;
+		#0a0a10;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 14px;
 	padding: 2rem;
 }
 
@@ -409,37 +489,21 @@ pre code {
 	margin-top: 1rem;
 }
 
-.snippet header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.5rem;
-}
-
-.snippet h3 {
-	margin: 0;
-	font-size: 0.75rem;
-	font-weight: 500;
-	text-transform: uppercase;
-	letter-spacing: 0.12em;
-	color: var(--text-faint);
-}
-
 .btn {
-	background: var(--surface-2);
-	color: var(--text);
-	border: 1px solid var(--border);
-	border-radius: 6px;
-	padding: 0.35rem 0.75rem;
+	background: transparent;
+	color: var(--text-dim);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 8px;
+	padding: 0.4rem 0.85rem;
 	font-family: inherit;
-	font-size: 0.8rem;
+	font-size: 0.78rem;
 	cursor: pointer;
-	transition: background 160ms ease, border-color 160ms ease;
+	transition: border-color 160ms ease, color 160ms ease;
 }
 
 .btn:hover {
-	background: var(--border);
-	border-color: #2e2e3c;
+	border-color: rgba(125, 249, 255, 0.3);
+	color: var(--accent);
 }
 
 .toast {

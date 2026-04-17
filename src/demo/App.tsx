@@ -6,6 +6,7 @@ import {
 	type RadiusValue,
 	type ThemeName
 } from '../lib/index.js';
+import { CodeBlock } from './CodeBlock.js';
 import { ExampleCard } from './ExampleCard.js';
 import { Playground } from './Playground.js';
 import { useToast, Toast } from './Toast.js';
@@ -21,7 +22,7 @@ export function App() {
 				<ThemeGallery onCopy={show} />
 				<RadiusShowcase onCopy={show} />
 				<Playground onCopy={show} />
-				<Usage />
+				<Usage onCopy={show} />
 				<footer>
 					by <a href="https://czorr.com">czorr</a>.
 					MIT.
@@ -143,8 +144,12 @@ function RadiusShowcase({ onCopy }: { onCopy: (msg: string) => void }) {
 
 /* ─── Usage docs ───────────────────────────────────────── */
 
-function Usage() {
-	const install = `npm install pixgrid`;
+function Usage({ onCopy }: { onCopy: (msg: string) => void }) {
+	const installTabs = [
+		{ label: 'npm', code: 'npm install pixgrid' },
+		{ label: 'pnpm', code: 'pnpm add pixgrid' },
+		{ label: 'yarn', code: 'yarn add pixgrid' }
+	];
 	const quick = `import { PixelGrid } from 'pixgrid';
 
 export default function Loading() {
@@ -163,29 +168,14 @@ export default function Loading() {
   off="rgba(255,255,255,0.08)"
 />`;
 	return (
-		<section>
+		<section className="usage">
 			<header>
 				<h2>usage</h2>
 			</header>
 
-			<h3 style={{ fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-faint)', margin: '1.5rem 0 0.5rem' }}>
-				install
-			</h3>
-			<pre><code>{install}</code></pre>
-
-			<h3 style={{ fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-faint)', margin: '1.5rem 0 0.5rem' }}>
-				quick start
-			</h3>
-			<pre><code>{quick}</code></pre>
-
-			<h3 style={{ fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-faint)', margin: '1.5rem 0 0.5rem' }}>
-				full customization
-			</h3>
-			<pre><code>{custom}</code></pre>
-
-			<h3 style={{ fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-faint)', margin: '1.5rem 0 0.5rem' }}>
-				props
-			</h3>
+			<CodeBlock tabs={installTabs} onCopy={onCopy} />
+			<CodeBlock code={quick} label="tsx" onCopy={onCopy} />
+			<CodeBlock code={custom} label="tsx" onCopy={onCopy} />
 			<PropsTable />
 		</section>
 	);

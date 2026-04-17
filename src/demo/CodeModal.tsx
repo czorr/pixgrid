@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { PixelGrid, type PixelGridProps } from '../lib/index.js';
+import { CodeBlock } from './CodeBlock.js';
 
 /**
  * Render a `<PixelGrid>` prop bag as readable JSX source.
@@ -56,9 +57,6 @@ export function CodeModal({
 	if (!open) return null;
 
 	const snippet = formatJsx(props);
-	const copy = () => {
-		void navigator.clipboard?.writeText(snippet).then(() => onCopy('snippet copied'));
-	};
 
 	return (
 		<div className="modal-overlay" onClick={onClose}>
@@ -91,15 +89,7 @@ export function CodeModal({
 				</div>
 
 				<div className="modal-snippet">
-					<header>
-						<h4>jsx</h4>
-						<button className="btn" onClick={copy} type="button">
-							copy
-						</button>
-					</header>
-					<pre>
-						<code>{snippet}</code>
-					</pre>
+					<CodeBlock code={snippet} label="jsx" onCopy={onCopy} />
 				</div>
 			</div>
 		</div>

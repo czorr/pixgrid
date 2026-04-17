@@ -7,6 +7,7 @@ import {
 	type PresetName,
 	type ThemeName
 } from '../lib/index.js';
+import { CodeBlock } from './CodeBlock.js';
 
 export function Playground({ onCopy }: { onCopy: (msg: string) => void }) {
 	const [presetName, setPresetName] = useState<PresetName>('spiral-cw');
@@ -44,10 +45,6 @@ export function Playground({ onCopy }: { onCopy: (msg: string) => void }) {
   radius={${radius}}${paused ? '\n  paused' : ''}
 />`;
 	}, [delays, duration, theme, cellSize, gap, radius, paused, useCustomColor, customColor]);
-
-	const copySnippet = () => {
-		void navigator.clipboard?.writeText(snippet).then(() => onCopy('snippet copied'));
-	};
 
 	return (
 		<section>
@@ -198,15 +195,7 @@ export function Playground({ onCopy }: { onCopy: (msg: string) => void }) {
 					</div>
 
 					<div className="snippet">
-						<header>
-							<h3>jsx</h3>
-							<button className="btn" onClick={copySnippet}>
-								copy
-							</button>
-						</header>
-						<pre>
-							<code>{snippet}</code>
-						</pre>
+						<CodeBlock code={snippet} label="jsx" onCopy={onCopy} />
 					</div>
 				</div>
 			</div>
