@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -sS http://127.0.0.1:5199/demo/ -o /dev/null -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://127.0.0.1:5199/demo/main.ts -o /dev/null -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://127.0.0.1:5199/src/pixgrid.ts -o /dev/null -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(kill %1)",
+      "Bash(curl -sS http://127.0.0.1:5199/ -o /dev/null -w \"root HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://127.0.0.1:5199/src/demo/main.tsx -o /dev/null -w \"main.tsx HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://127.0.0.1:5199/src/lib/PixelGrid.tsx -o /dev/null -w \"PixelGrid HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://127.0.0.1:5199/src/lib/presets.ts -o /dev/null -w \"presets HTTP %{http_code}\\\\n\")",
+      "Bash(pkill -f \"vite.*5199\")",
+      "Bash(pkill -f \"vite.*5200\")",
+      "Bash(pkill -f \"vite\")",
+      "Bash(curl -sS http://127.0.0.1:5201/ -o /dev/null -w \"HTTP %{http_code}\\\\n\")",
+      "Bash(curl -sS http://127.0.0.1:5201/ -o /dev/null -w \"dev HTTP %{http_code}\\\\n\")"
+    ]
+  }
+}
