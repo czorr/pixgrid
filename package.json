@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-name/pixgrid"
+    "url": "https://github.com/czorr/pixgrid"
   },
   "type": "module",
   "main": "./dist/lib/pixgrid.js",
